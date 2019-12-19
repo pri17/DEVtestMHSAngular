@@ -1,0 +1,8 @@
+html, body, my-app { height: 100%; }
+
+.content {
+  padding: 30px;
+  color:white;
+  background-color: #4466af;
+  border: 1px solid rgba(0,0,0,.05);
+}

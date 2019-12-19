@@ -1,0 +1,63 @@
+<h3>Messages with the Same Conversation ID: {{ConID}}</h3>
+
+<ng-template  #approvalColTooltipContentTemplate let-anchor>
+  {{anchor.nativeElement.getAttribute('dataTooltip')}}
+</ng-template>
+<div kendoTooltip
+ filter=".gridTooltip" [tooltipTemplate]="approvalColTooltipContentTemplate">
+<kendo-grid
+  [data]="gridData"
+  [pageSize]="state.take"
+  [pageable]="true"
+  [skip]="skip"
+  [resizable]="true"
+  >
+    <kendo-grid-column field="conversationID" title="Conversation ID" width="160"></kendo-grid-column>
+
+    <kendo-grid-column field="sequenceId" title="Sequence ID" width="70">
+      <ng-template kendoGridCellTemplate let-dataItem="dataItem" let-rowIndex="rowIndex">
+        <a style="text-decoration: underline" [routerLink]="['/message-detail', dataItem.sequenceId]">{{dataItem?.sequenceId}}</a>
+      </ng-template>
+    </kendo-grid-column>
+    <kendo-grid-column field="attempts" title="Attempts" width="60" ></kendo-grid-column>
+    <kendo-grid-column field="actionAt" title="Action At" width="60" ></kendo-grid-column>
+    <kendo-grid-column field="createdAt" title="Created At" filter="date" format="dd/MM/yyyy" width="120" ></kendo-grid-column>
+    <kendo-grid-column field="destination" title="Destination"  width="120"></kendo-grid-column>
+    <kendo-grid-column field="source" title="Source"  width="120"></kendo-grid-column>
+
+    <kendo-grid-column field="state" title="State"  width="120">
+      <ng-template kendoGridCellTemplate let-dataItem="dataItem" let-rowIndex="rowIndex">
+        {{dataItem?.state}} &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<button kendoButton  *ngIf="dataItem.state == 'Send'"
+        (click)="OpenDialog(dataItem)">Cancel</button>
+
+        <button kendoButton *ngIf="dataItem.state =='Sent'|| dataItem.state =='Failed'" (click)="OpenDialog(dataItem)">Resend</button>
+      </ng-template>
+    </kendo-grid-column>
+
+    <kendo-grid-column field="messageID" title="Message ID" width="160">
+      <ng-template kendoGridCellTemplate let-dataItem="dataItem" let-rowIndex="rowIndex">
+        <span class="gridTooltip" [attr.dataTooltip]="dataItem.shortContent">{{dataItem?.messageID}}</span>
+      </ng-template>
+    </kendo-grid-column>
+
+    <kendo-grid-column field="version" title="Version" width="80"></kendo-grid-column>
+  </kendo-grid>
+  </div>
+
+  <kendo-dialog title="Please confirm" *ngIf="open" (close)="close('cancel')" [minWidth]="250" [width]="450">
+    <p style="margin: 30px; text-align: center;">Are you sure you want to continue?</p>
+    <kendo-dialog-actions>
+        <button kendoButton (click)="close('no')">No</button>
+        <button kendoButton (click)="changeState()" primary="true">Yes</button>
+    </kendo-dialog-actions>
+</kendo-dialog>
+
+<kendo-popup [offset]="offset" *ngIf="show">
+  <div class='content'>
+      {{toggleText}}
+  </div>
+</kendo-popup>
+  <div *ngIf="!this.gridData">
+    <span class="k-icon k-i-loading" style="font-size: 64px;"></span>
+</div>
+

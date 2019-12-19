@@ -1,0 +1,37 @@
+.xmlTextArea {
+    height: 700px;
+    white-space: pre-wrap;
+    float: left;
+}
+
+.header {
+    text-align: center;
+}
+
+.clearFloat{
+    clear: both;
+}
+
+.content {
+  padding: 30px;
+  color:white;
+  background-color: #4466af;
+  border: 1px solid rgba(0,0,0,.05);
+}
+
+.bg-blue {
+  background-color: lightblue;
+}
+.bg-pink {
+  background-color: lightcoral;
+}
+.bg-blue-dark {
+  background-color: #86c5da;
+}
+.bg-pink-dark {
+  background-color: #eb5252;
+}
+
+.redss{
+  color: red
+}

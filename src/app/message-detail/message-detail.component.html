@@ -1,0 +1,40 @@
+<h2 class="header">Message Detail</h2>
+
+<ng-container *ngIf="messageContent$ | async as messageContent">
+
+    <textarea [style.width.%]="widthOfTextArea" #message  [innerHTML]= "messageContent?.Content | textHighlight: 'value'"
+    class="xmlTextArea" (keyup)="contentChange(message.value)">{{messageContent?.Content}}</textarea>
+
+  <ng-container *ngIf="(validationErrors$ | async) as errors">
+    <kendo-grid [data]="errors" [filterable]="true" [sortable]="true" [style.height.%]="75">
+      <kendo-grid-column field="SegmentOrGroup" title="Segment or Group" width="80"></kendo-grid-column>
+      <kendo-grid-column field="FieldNumber" title="Field Number" width="80"></kendo-grid-column>
+      <kendo-grid-column field="Field" title="Field" width="80"></kendo-grid-column>
+      <kendo-grid-column field="ErrorType" title="Error Type" width="80"></kendo-grid-column>
+      <kendo-grid-column field="ErrorText" title="Error Text" width="80"></kendo-grid-column>
+      <ng-template kendoGridNoRecordsTemplate>
+        No errors present in the message.
+      </ng-template>
+    </kendo-grid>
+  </ng-container>
+  <div class="d-flex justify-content-center clearFloat">
+    <button type="button" class="btn btn-primary mr-2 mt-2" (click)="validateBtn(message.value)">Validate</button>
+    <button type="submit" class="btn btn-primary mr-2 mt-2" [disabled]="!validated||!contentchanged" (click)="toUpdate()">Update</button>
+  </div>
+
+  <kendo-popup [offset]="offset" *ngIf="show">
+    <div class='content'>
+        {{toggleText}}
+    </div>
+  </kendo-popup>
+
+  <kendo-dialog title="Please confirm" *ngIf="open" (close)="close('cancel')" [minWidth]="250" [width]="450">
+    <p style="margin: 30px; text-align: center;">There exist errors in the message content, are you sure you still want to update?</p>
+    <kendo-dialog-actions>
+        <button kendoButton (click)="close('no')">No</button>
+        <button kendoButton (click)="callUpdate()" primary="true">Yes</button>
+    </kendo-dialog-actions>
+  </kendo-dialog>
+
+</ng-container>
+
